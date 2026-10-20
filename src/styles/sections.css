@@ -379,7 +379,7 @@ html.reduced .preloader { display: none; }
 }
 
 @media (max-width: 899px) {
-  .hero { padding-top: 6.5rem; padding-bottom: 0; gap: var(--space-l); min-height: 100svh; }
+  .hero { padding-top: 8.75rem; padding-bottom: 0; gap: var(--space-l); min-height: 100svh; }
   .hero__grid { align-items: start; }
   .hero__copy { grid-column: 1 / -1; }
   .hero__copy .h-hero { font-size: clamp(4.2rem, 21vw, 8rem); }

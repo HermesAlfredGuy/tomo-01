@@ -6,6 +6,10 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* The nav is fixed, so anchor jumps must clear it. Mobile nav wraps to two
+   rows (~116px), desktop is ~70px. */
+html { scroll-padding-top: 6rem; }
+@media (max-width: 899px) { html { scroll-padding-top: 8.5rem; } }
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
