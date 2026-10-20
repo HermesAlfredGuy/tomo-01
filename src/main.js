@@ -7,8 +7,10 @@ import { initReveals, refreshOnFonts, splitReveal } from './motion/reveal.js';
 import { initMarquees, initMagnetic, initCursor, initHorizontal, initCounters } from './motion/interactions.js';
 import { createStage } from './device/stage.js';
 import { createGarden } from './game/garden.js';
+import { initSound, sfx } from './audio.js';
 import { drawTapeArt } from './game/tapeArt.js';
 
+initSound();
 initSmoothScroll();
 initMotionToggle();
 initHorizontal();
@@ -110,7 +112,12 @@ ScrollTrigger.create({
       const k = Math.min(1, Math.max(0, (p - 0.3) / 0.44));
       const eased = 1 - Math.pow(1 - k, 3);
       const overshoot = Math.sin(Math.PI * Math.min(1, k * 1.1)) * 0.06 * (1 - k);
+      const before = stage.state.open;
       stage.setOpen(Math.min(1, eased + overshoot));
+      if (before <= 0.42 && stage.state.open > 0.42) {
+        sfx.thunk();
+        setTimeout(() => sfx.boot(), 140);
+      }
     }
     stage.apply();
 
@@ -229,6 +236,7 @@ if (gameCanvas) {
   const garden = createGarden(gameCanvas, {
     onCount(n, done) {
       if (statusEl) statusEl.textContent = done ? '12 / 12 — garden complete' : `${String(n).padStart(2, '0')} / 12 planted`;
+      if (done) sfx.done();
     },
   });
 
@@ -249,12 +257,15 @@ if (gameCanvas) {
       e.preventDefault();
       const [dx, dy] = dirs[keys[e.key]];
       garden.move(dx, dy);
+      sfx.tick();
     } else if (e.key === ' ' || e.key === 'Enter' || e.key === 'z' || e.key === 'Z') {
       e.preventDefault();
       garden.plant();
+      sfx.plant();
     } else if (e.key === 'r' || e.key === 'R') {
       e.preventDefault();
       garden.reset();
+      sfx.reset();
     }
   }, { passive: false });
 
@@ -262,10 +273,11 @@ if (gameCanvas) {
     btn.addEventListener('click', () => {
       const [dx, dy] = dirs[btn.dataset.dir];
       garden.move(dx, dy);
+      sfx.tick();
     });
   });
-  document.querySelectorAll('[data-action="a"]').forEach((btn) => btn.addEventListener('click', () => garden.plant()));
-  document.querySelectorAll('[data-action="b"]').forEach((btn) => btn.addEventListener('click', () => garden.reset()));
+  document.querySelectorAll('[data-action="a"]').forEach((btn) => btn.addEventListener('click', () => { garden.plant(); sfx.plant(); }));
+  document.querySelectorAll('[data-action="b"]').forEach((btn) => btn.addEventListener('click', () => { garden.reset(); sfx.reset(); }));
 }
 
 /* ------------------------------------------------------------------ *

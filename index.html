@@ -39,7 +39,13 @@
         <a href="#colours">Colours</a>
       </nav>
       <div class="nav__actions">
-        <button class="motion-toggle label" type="button" data-motion-toggle aria-pressed="false">
+        <button class="motion-toggle label" type="button" data-sound-toggle aria-pressed="false"
+                title="Synthesised cues for the hinge, the boot chime and the garden. Off by default.">
+          <span class="motion-toggle__dot" aria-hidden="true"></span>
+          <span data-sound-label>Sound: off</span>
+        </button>
+        <button class="motion-toggle label" type="button" data-motion-toggle aria-pressed="false"
+                title="Calm mode cuts the scroll smoothing and long transitions. This site ignores your device's reduce-motion setting on purpose.">
           <span class="motion-toggle__dot" aria-hidden="true"></span>
           <span data-motion-label>Motion: full</span>
         </button>
@@ -69,11 +75,11 @@
         <div class="hero__annotations" aria-hidden="true">
           <div class="dim dim--v">
             <span class="dim__line"></span>
-            <span class="dim__label label">133 mm</span>
+            <span class="dim__label label">78 mm</span>
           </div>
           <div class="dim dim--h">
             <span class="dim__line"></span>
-            <span class="dim__label label">22 mm</span>
+            <span class="dim__label label">21 mm</span>
           </div>
           <div class="hero__plate label">
             <span>Tomo-01</span>
@@ -84,8 +90,8 @@
 
       <div class="wrap hero__foot">
         <dl class="hero__stats" data-reveal-group>
-          <div><dt class="label">Footprint</dt><dd class="display">133 × 74 mm</dd></div>
-          <div><dt class="label">Mass</dt><dd class="display">218 g</dd></div>
+          <div><dt class="label">Footprint</dt><dd class="display">92 × 78 mm</dd></div>
+          <div><dt class="label">Mass</dt><dd class="display">178 g</dd></div>
           <div><dt class="label">Battery</dt><dd class="display">9 h</dd></div>
           <div><dt class="label">Notifications</dt><dd class="display">0</dd></div>
         </dl>
@@ -141,11 +147,11 @@
                 <path d="M370 78 v144" stroke-dasharray="2 4" />
               </g>
               <g fill="currentColor" font-family="DM Mono, monospace" font-size="10" letter-spacing="0.08em">
-                <text x="24" y="12">TOP — 4.0″ LCD</text>
-                <text x="318" y="72">640 × 480</text>
+                <text x="24" y="12">TOP — 2.9″ LCD</text>
+                <text x="318" y="72">428 × 320</text>
                 <text x="318" y="84" opacity="0.6">PIXEL-PERFECT</text>
-                <text x="24" y="156">BOTTOM — 3.0″ LCD</text>
-                <text x="318" y="216">480 × 360</text>
+                <text x="24" y="156">BOTTOM — 2.4″ LCD</text>
+                <text x="318" y="216">320 × 240</text>
                 <text x="318" y="228" opacity="0.6">TOUCH</text>
                 <text x="24" y="298" opacity="0.6">SCALE 1:1 · NO INTERPOLATION</text>
               </g>
@@ -316,19 +322,20 @@
             <caption class="sr-only">Tomo-01 technical specification</caption>
             <tbody>
               <tr><th scope="row">Model</th><td>Tomo-01, first run</td></tr>
-              <tr><th scope="row">Top display</th><td>4.0″ LCD · 640 × 480 · 540 nits</td></tr>
-              <tr><th scope="row">Bottom display</th><td>3.0″ LCD · 480 × 360 · touch</td></tr>
+              <tr><th scope="row">Top display</th><td>2.9″ LCD · 428 × 320 · 540 nits</td></tr>
+              <tr><th scope="row">Bottom display</th><td>2.4″ touch LCD · 320 × 240</td></tr>
               <tr><th scope="row">Processor</th><td>Dual ARM · 1.2 GHz · 4 MB cart RAM</td></tr>
-              <tr><th scope="row">Dimensions</th><td>133 × 74 × 22 mm, closed</td></tr>
-              <tr><th scope="row">Mass</th><td>218 g with battery</td></tr>
-              <tr><th scope="row">Battery</th><td>9 h play · 40 min to 80 %</td></tr>
+              <tr><th scope="row">Dimensions</th><td>92 × 78 × 21 mm, closed</td></tr>
+              <tr><th scope="row">Mass</th><td>178 g with battery</td></tr>
+              <tr><th scope="row">Battery</th><td>9 h play · 0→80 % in 40 min</td></tr>
               <tr><th scope="row">Charging</th><td>USB-C, 15 W</td></tr>
               <tr><th scope="row">Inputs</th><td>D-pad, A, B, two shoulders, Start, Select, volume wheel, power latch</td></tr>
               <tr><th scope="row">Audio</th><td>Stereo speaker · 3.5 mm jack</td></tr>
               <tr><th scope="row">Storage</th><td>Cartridge only. Nothing to download.</td></tr>
-              <tr><th scope="row">Wireless</th><td>None</td></tr>
+              <tr><th scope="row">Hinge</th><td>Glass-filled nylon · rated 30,000 opens</td></tr>
+              <tr><th scope="row">Wireless</th><td>None. No wifi, no Bluetooth, no camera.</td></tr>
               <tr><th scope="row">Notifications</th><td>0</td></tr>
-              <tr><th scope="row">In the box</th><td>Tomo-01, <em>Pebble Garden</em> tape, stylus, USB-C cable, manual</td></tr>
+              <tr><th scope="row">In the box</th><td>Tomo-01, <em>Pebble Garden</em> tape, stylus, USB-C cable, wrist strap, manual</td></tr>
             </tbody>
           </table>
           <aside class="specs__aside">

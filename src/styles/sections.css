@@ -438,7 +438,8 @@ html.reduced .preloader { display: none; }
   }
   .nav__links::-webkit-scrollbar { display: none; }
   .nav__links a { font-size: 10px; letter-spacing: 0.14em; padding-block: 0.8rem; display: inline-block; }
-  .motion-toggle [data-motion-label] { display: none; }
+  .motion-toggle [data-motion-label],
+  .motion-toggle [data-sound-label] { display: none; }
   .motion-toggle { min-width: 44px; min-height: 44px; justify-content: center; }
   .nav__co { display: none; }
   .nav__cta { font-size: 11px; padding: 0.8em 1em; min-height: 44px; display: inline-flex; align-items: center; }
