@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tomo-01 — a handheld for one player</title>
+  <meta name="description" content="Tomo-01 folds shut like a book, boots in four seconds and has nothing to check. Two screens, ten buttons, $149. Ships March 12." />
+  <meta name="theme-color" content="#f2ede3" />
+  <meta property="og:title" content="Tomo-01 — a handheld for one player" />
+  <meta property="og:description" content="Two screens. Ten buttons. Nothing to check. $149." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <script type="module" crossorigin src="./assets/index-CZ3Xcho0.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-DSOpzHq3.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <div class="preloader" aria-hidden="true">
+    <div class="preloader__inner">
+      <span class="preloader__mark display">Tomo</span>
+      <span class="preloader__meta label">Handheld № 01</span>
+      <span class="preloader__num label">000</span>
+    </div>
+  </div>
+
+  <canvas id="stage" class="stage" aria-hidden="true"></canvas>
+
+  <header class="nav">
+    <div class="nav__inner">
+      <a class="nav__mark" href="#top" aria-label="Tomo, back to top">
+        <span class="nav__word display">Tomo</span>
+        <span class="nav__co label">Supply Co.</span>
+      </a>
+      <nav class="nav__links" aria-label="Sections">
+        <a href="#boot">The boot</a>
+        <a href="#tapes">Tapes</a>
+        <a href="#play">Play</a>
+        <a href="#specs">Specs</a>
+        <a href="#colours">Colours</a>
+      </nav>
+      <div class="nav__actions">
+        <button class="motion-toggle label" type="button" data-motion-toggle aria-pressed="false">
+          <span class="motion-toggle__dot" aria-hidden="true"></span>
+          <span data-motion-label>Motion: full</span>
+        </button>
+        <a class="btn btn--accent nav__cta" href="#order">Pre-order — $149</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ================= HERO ================== -->
+    <section class="hero" id="top">
+      <div class="wrap hero__grid">
+        <div class="hero__copy">
+          <p class="label hero__eyebrow" data-intro>Tomo Supply Co. — Kyoto, est. 2024</p>
+          <h1 class="display h-hero" data-split-intro="lines">Open it.</h1>
+          <p class="hero__sentence" data-intro>You&rsquo;re somewhere <span class="hero__else">else<span class="hero__star" aria-hidden="true">✳</span></span>.</p>
+          <p class="hero__lede" data-intro>
+            Tomo-01 folds shut like a book, boots in four seconds, and has nothing to check.
+            Two screens, ten buttons, one cartridge slot. $149, ships March&nbsp;12.
+          </p>
+          <div class="hero__cta" data-intro>
+            <a class="btn btn--accent" href="#order">Pre-order Tomo-01</a>
+            <a class="btn btn--ghost" href="#boot">Watch it boot <span aria-hidden="true">↓</span></a>
+          </div>
+        </div>
+
+        <div class="hero__annotations" aria-hidden="true">
+          <div class="dim dim--v">
+            <span class="dim__line"></span>
+            <span class="dim__label label">133 mm</span>
+          </div>
+          <div class="dim dim--h">
+            <span class="dim__line"></span>
+            <span class="dim__label label">22 mm</span>
+          </div>
+          <div class="hero__plate label">
+            <span>Tomo-01</span>
+            <span>Butter / 001</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap hero__foot">
+        <dl class="hero__stats" data-reveal-group>
+          <div><dt class="label">Footprint</dt><dd class="display">133 × 74 mm</dd></div>
+          <div><dt class="label">Mass</dt><dd class="display">218 g</dd></div>
+          <div><dt class="label">Battery</dt><dd class="display">9 h</dd></div>
+          <div><dt class="label">Notifications</dt><dd class="display">0</dd></div>
+        </dl>
+        <div class="hero__mouse label" aria-hidden="true"><span></span>Scroll</div>
+      </div>
+    </section>
+
+    <!-- ================= 01 THE BOOT ================== -->
+    <section class="boot" id="boot" aria-labelledby="boot-h">
+      <div class="boot__sticky">
+        <div class="wrap boot__grid">
+          <div class="boot__copy">
+            <p class="label">01 / The boot</p>
+            <h2 class="display h-2" id="boot-h">A hinge you<br />can hear.</h2>
+            <p class="boot__body">
+              Glass-filled nylon, machined to a 0.2&nbsp;mm parting line, rated for thirty thousand
+              openings. It closes with a sound your hands will learn.
+            </p>
+            <p class="boot__body boot__body--dim">
+              Open it and the top screen is already awake. No logo crawl, no account, no update.
+              Four seconds from cold.
+            </p>
+            <p class="label boot__hint" aria-hidden="true">Scroll to open <span class="boot__arrow">↓</span></p>
+          </div>
+
+          <div class="boot__readout" aria-hidden="true">
+            <div class="readout__row"><span>Lid</span><b data-readout-lid>000°</b></div>
+            <div class="readout__row"><span>Screen</span><b data-readout-screen>Off</b></div>
+            <div class="readout__row"><span>Boot</span><b data-readout-boot>—</b></div>
+            <div class="readout__bar"><i data-readout-bar></i></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 02 TWO SCREENS ================== -->
+    <section class="section screens" id="screens" aria-labelledby="screens-h">
+      <div class="wrap">
+        <div class="screens__head">
+          <p class="label">02 / Two screens</p>
+          <h2 class="display h-1" id="screens-h" data-split="lines">Two screens. One pocket.</h2>
+        </div>
+
+        <div class="screens__grid">
+          <figure class="diagram" data-reveal="up">
+            <svg viewBox="0 0 420 300" role="img" aria-label="Diagram of the Tomo-01 top and bottom screens with their resolutions">
+              <g fill="none" stroke="currentColor" stroke-width="1">
+                <rect x="24" y="18" width="372" height="120" rx="9" />
+                <rect x="48" y="40" width="266" height="76" rx="3" stroke-dasharray="3 4" />
+                <rect x="24" y="162" width="372" height="120" rx="9" />
+                <rect x="48" y="184" width="266" height="76" rx="3" stroke-dasharray="3 4" />
+                <path d="M314 78 h56 M314 222 h56" stroke-dasharray="2 4" />
+                <path d="M370 78 v144" stroke-dasharray="2 4" />
+              </g>
+              <g fill="currentColor" font-family="DM Mono, monospace" font-size="10" letter-spacing="0.08em">
+                <text x="24" y="12">TOP — 4.0″ LCD</text>
+                <text x="318" y="72">640 × 480</text>
+                <text x="318" y="84" opacity="0.6">PIXEL-PERFECT</text>
+                <text x="24" y="156">BOTTOM — 3.0″ LCD</text>
+                <text x="318" y="216">480 × 360</text>
+                <text x="318" y="228" opacity="0.6">TOUCH</text>
+                <text x="24" y="298" opacity="0.6">SCALE 1:1 · NO INTERPOLATION</text>
+              </g>
+            </svg>
+            <figcaption class="label">Fig. 1 — screen arrangement, 1:1</figcaption>
+          </figure>
+
+          <div class="screens__text">
+            <p class="screens__lead" data-reveal="up">
+              The top screen is where the world is. The bottom is where you live in it —&nbsp;maps,
+              inventories, a second pair of eyes.
+            </p>
+            <p data-reveal="up">
+              Games get to use both, because games used to. Nothing is scaled, nothing is stretched;
+              a sprite drawn at 16 pixels arrives at 16 pixels. In daylight the LCD goes to 540 nits.
+              At night it goes to 2.
+            </p>
+            <ul class="facts" data-reveal-group>
+              <li><span class="label">Refresh</span><b>60 Hz</b></li>
+              <li><span class="label">Colour</span><b>16.7 m</b></li>
+              <li><span class="label">Glass</span><b>Chem-strengthened</b></li>
+              <li><span class="label">Stylus</span><b>In the box</b></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 03 TAPES ================== -->
+    <section class="section tapes" id="tapes" aria-labelledby="tapes-h" data-horizontal>
+      <div class="wrap tapes__head">
+        <div>
+          <p class="label">03 / Tapes</p>
+          <h2 class="display h-1" id="tapes-h">Load a tape. Be gone.</h2>
+        </div>
+        <p class="tapes__note">
+          Translucent cartridges, 4&nbsp;MB each, no installs and no patches.
+          Six at launch, $12–18. <em>Pebble Garden</em> is in the box.
+        </p>
+      </div>
+
+      <div class="rail">
+        <div class="rail__track h-track">
+          <article class="tape h-card" style="--tape:#ffce3a; --tape-ink:#4a3200">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="garden" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 01</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Pebble Garden</h3>
+              <p class="tape__pitch">Grow a garden between the raindrops. Packed in the box.</p>
+              <span class="label tape__price">Included</span>
+            </div>
+          </article>
+
+          <article class="tape h-card" style="--tape:#8fa9d6; --tape-ink:#101a33">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="bus" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 02</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Night Bus</h3>
+              <p class="tape__pitch">Eleven stops, one conversation, no way back.</p>
+              <span class="label tape__price">$14</span>
+            </div>
+          </article>
+
+          <article class="tape h-card" style="--tape:#f2a65a; --tape-ink:#3a1c00">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="kettle" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 03</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Kettle &amp; Crow</h3>
+              <p class="tape__pitch">A tea shop, a crow, forty small puzzles.</p>
+              <span class="label tape__price">$12</span>
+            </div>
+          </article>
+
+          <article class="tape h-card" style="--tape:#a9e5c3; --tape-ink:#0e3325">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="rally" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 04</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Tiny Rally</h3>
+              <p class="tape__pitch">Four wheels, nine stages, one very small hill.</p>
+              <span class="label tape__price">$18</span>
+            </div>
+          </article>
+
+          <article class="tape h-card" style="--tape:#7fc7c3; --tape-ink:#00282c">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="sea" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 05</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Deep Sea Mail</h3>
+              <p class="tape__pitch">Deliver letters to things with too many arms.</p>
+              <span class="label tape__price">$15</span>
+            </div>
+          </article>
+
+          <article class="tape h-card" style="--tape:#d9b8e8; --tape-ink:#2c1240">
+            <div class="tape__shell">
+              <canvas class="tape__art" data-tape-art="cat" width="128" height="96"></canvas>
+              <span class="tape__no label">№ 06</span>
+            </div>
+            <div class="tape__meta">
+              <h3 class="tape__name display">Miso, Nine Lives</h3>
+              <p class="tape__pitch">Die eight times. Learn the house by heart.</p>
+              <span class="label tape__price">$16</span>
+            </div>
+          </article>
+        </div>
+      </div>
+      <p class="wrap label rail__hint" aria-hidden="true">Drag / scroll →</p>
+    </section>
+
+    <!-- ================= 04 PLAY ================== -->
+    <section class="section play" id="play" aria-labelledby="play-h">
+      <div class="wrap play__grid">
+        <div class="play__copy">
+          <p class="label">04 / Play it now</p>
+          <h2 class="display h-1" id="play-h">Three buttons<br />is enough.</h2>
+          <p>
+            D-pad, A, B. That is the whole grammar. <em>Pebble Garden</em> — the tape in the box —
+            runs right here on the same 60&nbsp;Hz loop as the hardware.
+          </p>
+          <p class="play__keys label">Arrows / WASD walk · Space plant · R reset — or use the buttons</p>
+        </div>
+
+        <div class="console" data-reveal="up">
+          <div class="console__top">
+            <div class="console__screen">
+              <canvas id="game" width="320" height="240" tabindex="0" aria-label="Pebble Garden. Use arrow keys to walk and space to plant." aria-describedby="game-help"></canvas>
+              <div class="console__scan" aria-hidden="true"></div>
+            </div>
+            <div class="console__speaker" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <p id="game-help" class="visually-hidden">Walk onto a bare patch and press space to plant a seed. Press R to reset the garden. Twelve seeds finish the garden.</p>
+          </div>
+          <div class="console__controls">
+            <div class="dpad" role="group" aria-label="Direction pad">
+              <button class="dpad__btn dpad__up" data-dir="up" aria-label="Up">▲</button>
+              <button class="dpad__btn dpad__left" data-dir="left" aria-label="Left">◀</button>
+              <button class="dpad__btn dpad__right" data-dir="right" aria-label="Right">▶</button>
+              <button class="dpad__btn dpad__down" data-dir="down" aria-label="Down">▼</button>
+            </div>
+            <div class="ab">
+              <button class="ab__btn ab__b" data-action="b" aria-label="B">B</button>
+              <button class="ab__btn ab__a" data-action="a" aria-label="A, plant a seed">A</button>
+            </div>
+          </div>
+          <p class="console__hint label"><span data-game-status aria-live="polite">00 / 12 planted</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 05 SPECS ================== -->
+    <section class="section specs" id="specs" aria-labelledby="specs-h">
+      <div class="wrap">
+        <div class="specs__head">
+          <p class="label">05 / Specification</p>
+          <h2 class="display h-1" id="specs-h">Everything, measured.</h2>
+        </div>
+        <div class="specs__grid">
+          <table class="specs__table">
+            <caption class="sr-only">Tomo-01 technical specification</caption>
+            <tbody>
+              <tr><th scope="row">Model</th><td>Tomo-01, first run</td></tr>
+              <tr><th scope="row">Top display</th><td>4.0″ LCD · 640 × 480 · 540 nits</td></tr>
+              <tr><th scope="row">Bottom display</th><td>3.0″ LCD · 480 × 360 · touch</td></tr>
+              <tr><th scope="row">Processor</th><td>Dual ARM · 1.2 GHz · 4 MB cart RAM</td></tr>
+              <tr><th scope="row">Dimensions</th><td>133 × 74 × 22 mm, closed</td></tr>
+              <tr><th scope="row">Mass</th><td>218 g with battery</td></tr>
+              <tr><th scope="row">Battery</th><td>9 h play · 40 min to 80 %</td></tr>
+              <tr><th scope="row">Charging</th><td>USB-C, 15 W</td></tr>
+              <tr><th scope="row">Inputs</th><td>D-pad, A, B, two shoulders, Start, Select, volume wheel, power latch</td></tr>
+              <tr><th scope="row">Audio</th><td>Stereo speaker · 3.5 mm jack</td></tr>
+              <tr><th scope="row">Storage</th><td>Cartridge only. Nothing to download.</td></tr>
+              <tr><th scope="row">Wireless</th><td>None</td></tr>
+              <tr><th scope="row">Notifications</th><td>0</td></tr>
+              <tr><th scope="row">In the box</th><td>Tomo-01, <em>Pebble Garden</em> tape, stylus, USB-C cable, manual</td></tr>
+            </tbody>
+          </table>
+          <aside class="specs__aside">
+            <p class="specs__note">
+              Every number above is printed in the manual that ships in the box. If a line changes,
+              the manual is reprinted — we would rather be slow than approximate.
+            </p>
+            <p class="specs__tol">Tolerance — shell 0.15 mm · hinge 0.2 mm · weight ±3&nbsp;g</p>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= 06 COLOURS ================== -->
+    <section class="section colours" id="colours" aria-labelledby="colours-h">
+      <div class="wrap colours__grid">
+        <div class="colours__copy">
+          <p class="label">06 / Colour</p>
+          <h2 class="display h-1" id="colours-h">Pick a shell.</h2>
+          <p>Four moulded colours, dyed through — not painted. Scuffs stay the same colour as the shell.</p>
+          <div class="swatches" role="radiogroup" aria-label="Shell colour">
+            <button class="swatch is-active" type="button" role="radio" aria-checked="true" data-shell="butter" style="--sw:#ffce3a"><span aria-hidden="true"></span>Butter</button>
+            <button class="swatch" type="button" role="radio" aria-checked="false" data-shell="mint" style="--sw:#a9e5c3"><span aria-hidden="true"></span>Mint</button>
+            <button class="swatch" type="button" role="radio" aria-checked="false" data-shell="cola" style="--sw:#e5432b"><span aria-hidden="true"></span>Cola</button>
+            <button class="swatch is-sold" type="button" role="radio" aria-checked="false" data-shell="bone" style="--sw:#e2dac8"><span aria-hidden="true"></span>Bone <em class="label">Sold out</em></button>
+          </div>
+          <p class="colours__pick label">Selected — <b data-shell-name>Butter</b></p>
+        </div>
+        <div class="colours__space" aria-hidden="true">
+          <span class="colours__spec label">Shell · 001</span>
+          <span class="colours__spec colours__spec--b label">ABS · dyed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= MANIFESTO ================== -->
+    <section class="manifesto" aria-labelledby="mani-h">
+      <div class="wrap">
+        <p class="label">07 / The deal</p>
+        <h2 class="display manifesto__h" id="mani-h">
+          <span>No accounts.</span>
+          <span>No updates.</span>
+          <span>No wifi.</span>
+        </h2>
+        <div class="manifesto__row">
+          <p class="manifesto__body">
+            Tomo-01 does one thing: it plays. When the battery is empty it is a bookend.
+            That is the whole deal, and it is why it costs $149 instead of $549.
+          </p>
+          <p class="label manifesto__sig">Designed in Kyoto<br />Assembled in small batches<br />March 12, first run</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= ORDER ================== -->
+    <section class="section order" id="order" aria-labelledby="order-h">
+      <div class="wrap order__grid">
+        <div class="order__copy">
+          <p class="label">08 / Pre-order</p>
+          <h2 class="display h-1" id="order-h">Reserve one.</h2>
+          <p class="order__price"><span class="display">$149</span><span class="label">First run · ships March 12</span></p>
+          <ul class="order__list">
+            <li>A unit is held for 72 hours. No card is taken today.</li>
+            <li><em>Pebble Garden</em> tape included.</li>
+            <li>One colour per order. Bone is sold out.</li>
+          </ul>
+        </div>
+
+        <form class="order__form" data-order-form novalidate>
+          <label class="field">
+            <span class="label">Email</span>
+            <input type="email" name="email" autocomplete="email" placeholder="you@somewhere.com" required />
+          </label>
+          <label class="field">
+            <span class="label">Shell colour</span>
+            <select name="shell">
+              <option>Butter</option>
+              <option>Mint</option>
+              <option>Cola</option>
+              <option disabled>Bone — sold out</option>
+            </select>
+          </label>
+          <button class="btn btn--accent order__submit" type="submit">Pre-order Tomo-01 — $149</button>
+          <p class="order__note label" data-order-note>Demo storefront. Nothing leaves this page.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__top">
+      <div class="footer__cols">
+        <div>
+          <p class="label">Product</p>
+          <a href="#boot">The boot</a>
+          <a href="#tapes">Tapes</a>
+          <a href="#specs">Specification</a>
+          <a href="#colours">Colours</a>
+        </div>
+        <div>
+          <p class="label">Supply Co.</p>
+          <a href="#order">Pre-order</a>
+          <a href="#play">Play the demo</a>
+          <a href="#top">Back to top</a>
+        </div>
+        <div>
+          <p class="label">Small print</p>
+          <p class="footer__small">Tomo is a fictional product made as a design exercise. No orders are taken, no data is collected.</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer__word display" aria-hidden="true">Tomo</div>
+    <div class="wrap footer__base label">
+      <span>© 2026 Tomo Supply Co.</span>
+      <span>Type — Big Shoulders Display, Barlow, DM Mono</span>
+      <span>Made on paper</span>
+    </div>
+  </footer>
+
+</body>
+</html>
