@@ -396,6 +396,20 @@
   .boot__sticky { align-items: flex-end; padding-bottom: 3vh; }
   .boot__grid { grid-template-columns: 1fr; gap: var(--space-m); }
   .boot__copy { grid-column: 1 / -1; padding-top: 5.5rem; }
+  /* On phones the device sits behind the copy at a size where its dark panel
+     and shadow fall under the body text. Give the copy its own paper ground so
+     no text is ever read over the object; the scrim fades out at the foot so
+     the device still reads as continuous. */
+  .boot__copy {
+    background:
+      linear-gradient(to bottom,
+        var(--ground) 0,
+        var(--ground) calc(100% - 2.2rem),
+        color-mix(in oklab, var(--ground) 0%, transparent) 100%);
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    padding-bottom: 2.2rem;
+  }
   .boot__copy .h-2 { font-size: clamp(2rem, 9vw, 2.9rem); }
   .boot__body { max-width: 40ch; font-size: var(--step--1); }
   .boot__body--dim, .boot__hint { display: none; }
