@@ -22,8 +22,8 @@ export function playIntro() {
   if (pre) {
     const num = pre.querySelector('.preloader__num');
     const o = { v: 0 };
-    tl.to(o, { v: 100, duration: 1.3, ease: 'power2.inOut', onUpdate: () => (num.textContent = String(Math.round(o.v)).padStart(3, '0')) })
-      .to(pre, { clipPath: 'inset(0% 0% 100% 0%)', duration: 1.1, ease: 'expo.inOut' })
+    tl.to(o, { v: 100, duration: 0.95, ease: 'power2.inOut', onUpdate: () => (num.textContent = String(Math.round(o.v)).padStart(3, '0')) })
+      .to(pre, { clipPath: 'inset(0% 0% 100% 0%)', duration: 0.85, ease: 'expo.inOut' })
       .add(() => pre.remove());
   }
   tl.add(() => heroSplits.forEach((s) => s?.play()), pre ? '-=0.55' : 0)
