@@ -103,7 +103,8 @@ ScrollTrigger.create({
     if (p < 0.28) {
       const k = easeInOut(Math.min(1, p / 0.28));
       blend(P.hero, P.boot, reduced ? 1 : k);
-      stage.setOpen(0);
+      stage.setOpen(0.16 * (1 - k));
+      if (k < 0.15 && stage.screens.mode === 'off') stage.screens.preview();
     } else {
       KEYS.forEach((key) => { stage.state[key] = P.boot[key]; });
       const k = Math.min(1, Math.max(0, (p - 0.3) / 0.44));

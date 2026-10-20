@@ -148,8 +148,8 @@ export function createStage(canvas) {
     model.add(rail);
   });
   const glowBottom = new THREE.Mesh(
-    new THREE.PlaneGeometry(7.4, 5.8),
-    new THREE.MeshBasicMaterial({ map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false })
+    new THREE.PlaneGeometry(7.8, 6.2),
+    new THREE.MeshBasicMaterial({ map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.45, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false })
   );
   glowBottom.rotation.x = -Math.PI / 2;
   glowBottom.position.set(0, TB + 0.016, 0.1);
@@ -259,10 +259,10 @@ export function createStage(canvas) {
   lidPivot.add(topScreen);
 
   const glowMatTop = new THREE.MeshBasicMaterial({
-    map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.3,
+    map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.55,
     blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
   });
-  const glowTop = new THREE.Mesh(new THREE.PlaneGeometry(10.6, 7.0), glowMatTop);
+  const glowTop = new THREE.Mesh(new THREE.PlaneGeometry(11.4, 7.8), glowMatTop);
   glowTop.rotation.x = Math.PI / 2;
   glowTop.position.set(0, 0.079, D / 2 - R);
   lidPivot.add(glowTop);
