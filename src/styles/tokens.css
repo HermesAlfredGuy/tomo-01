@@ -8,7 +8,7 @@
   --ground-2: #e7e0d2;
   --ground-3: #dcd3c1;
   --ink: #17140f;
-  --ink-2: #57503f;
+  --ink-2: #4a4335;
   --line: color-mix(in oklab, var(--ink) 15%, transparent);
   --line-soft: color-mix(in oklab, var(--ink) 8%, transparent);
   --accent: #e5432b;
