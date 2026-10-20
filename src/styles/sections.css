@@ -457,4 +457,5 @@
      at arm's length. */
   .hero__lede, .lede, .boot__body, .tape__pitch, .screens__lead { font-size: max(15px, var(--step-0)); line-height: 1.45; }
   .label, .specs__table th, .readout__row span, .tape__meta, .swatch { font-size: max(12px, var(--step--2)); }
+  .tapes__note, .order__terms li { font-size: max(14.5px, var(--step--1)); line-height: 1.5; }
 }
