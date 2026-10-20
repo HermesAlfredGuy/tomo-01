@@ -109,6 +109,18 @@ export function makeLidDecal(w, d) {
   return c;
 }
 
+export function makeScreenGlow() {
+  const c = makeCanvas(4, 4, 64);
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(c.width / 2, c.height / 2, c.width * 0.24, c.width / 2, c.height / 2, c.width / 2);
+  grad.addColorStop(0, 'rgba(255,255,255,0.55)');
+  grad.addColorStop(0.55, 'rgba(255,255,255,0.22)');
+  grad.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = grad;
+  g.fillRect(0, 0, c.width, c.height);
+  return c;
+}
+
 export function makeContactShadow(alpha = 1) {
   const c = makeCanvas(24, 24, 64);
   const g = c.getContext('2d');

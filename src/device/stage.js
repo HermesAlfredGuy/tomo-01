@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createScreens } from './screen.js';
-import { makeBaseDecal, makeLidDecal, makeLidOuterDecal, makeLetterDecal, makeContactShadow, makeShellNoise } from './textures.js';
+import { makeBaseDecal, makeLidDecal, makeLidOuterDecal, makeLetterDecal, makeContactShadow, makeShellNoise, makeScreenGlow } from './textures.js';
 
 const W = 13.3;   // width
 const D = 7.4;    // depth (closed height of the face)
@@ -146,6 +146,14 @@ export function createStage(canvas) {
     rail.receiveShadow = true;
     model.add(rail);
   });
+  const glowBottom = new THREE.Mesh(
+    new THREE.PlaneGeometry(7.4, 5.8),
+    new THREE.MeshBasicMaterial({ map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.22, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false })
+  );
+  glowBottom.rotation.x = -Math.PI / 2;
+  glowBottom.position.set(0, TB + 0.016, 0.1);
+  model.add(glowBottom);
+
   const bottomGlass = new THREE.Mesh(new THREE.PlaneGeometry(5.6, 4.2), glassMat);
   bottomGlass.rotation.x = -Math.PI / 2;
   bottomGlass.position.set(0, TB + 0.045, 0.1);
@@ -248,6 +256,16 @@ export function createStage(canvas) {
   topScreen.rotation.x = Math.PI / 2;
   topScreen.position.set(0, 0.074, D / 2 - R);
   lidPivot.add(topScreen);
+
+  const glowTex = new THREE.CanvasTexture(makeScreenGlow());
+  const glowMatTop = new THREE.MeshBasicMaterial({
+    map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.3,
+    blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
+  });
+  const glowTop = new THREE.Mesh(new THREE.PlaneGeometry(10.6, 7.0), glowMatTop);
+  glowTop.rotation.x = Math.PI / 2;
+  glowTop.position.set(0, 0.079, D / 2 - R);
+  lidPivot.add(glowTop);
 
   const topGlass = new THREE.Mesh(new THREE.PlaneGeometry(8.6, 5.2), glassMat);
   topGlass.rotation.x = Math.PI / 2;
