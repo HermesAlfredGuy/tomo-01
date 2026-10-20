@@ -92,6 +92,7 @@ export function createStage(canvas) {
   bottomTex.colorSpace = THREE.SRGBColorSpace;
   bottomTex.generateMipmaps = false;
 
+  const glowTex = new THREE.CanvasTexture(makeScreenGlow());
   const screenMatTop = new THREE.MeshBasicMaterial({ map: topTex, toneMapped: false });
   const screenMatBottom = new THREE.MeshBasicMaterial({ map: bottomTex, toneMapped: false });
 
@@ -257,7 +258,6 @@ export function createStage(canvas) {
   topScreen.position.set(0, 0.074, D / 2 - R);
   lidPivot.add(topScreen);
 
-  const glowTex = new THREE.CanvasTexture(makeScreenGlow());
   const glowMatTop = new THREE.MeshBasicMaterial({
     map: glowTex, color: '#b9f24a', transparent: true, opacity: 0.3,
     blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false,
