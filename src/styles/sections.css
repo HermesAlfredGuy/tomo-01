@@ -21,7 +21,7 @@
 .preloader__mark { font-size: clamp(3rem, 9vw, 7rem); line-height: 0.8; font-weight: 800; }
 .preloader__meta { color: var(--ink-2); }
 .preloader__num { font-size: var(--step--1); letter-spacing: 0.2em; margin-top: 0.8rem; }
-html.reduced .preloader { display: none; }
+
 
 /* ---------- nav ---------- */
 .nav {
@@ -51,14 +51,14 @@ html.reduced .preloader { display: none; }
 .nav__actions { display: flex; align-items: center; gap: 0.9rem; }
 .nav__cta { padding: 0.72em 1.15em; font-size: var(--step--2); }
 
-.motion-toggle {
+.nav-toggle {
   min-height: 34px; padding-inline: 0.5rem;
   display: inline-flex; align-items: center; gap: 0.45rem; color: var(--ink-2);
   font-size: var(--step--2); letter-spacing: 0.06em; padding: 0.4rem 0;
 }
-.motion-toggle__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 12%, transparent); }
-.motion-toggle[aria-pressed="true"] .motion-toggle__dot { background: var(--accent); }
-.motion-toggle:hover { color: var(--ink); }
+.nav-toggle__dot { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 0 3px color-mix(in oklab, var(--ink) 12%, transparent); }
+.nav-toggle[aria-pressed="true"] .nav-toggle__dot { background: var(--accent); }
+.nav-toggle:hover { color: var(--ink); }
 
 /* ---------- buttons ---------- */
 .btn {
@@ -438,9 +438,8 @@ html.reduced .preloader { display: none; }
   }
   .nav__links::-webkit-scrollbar { display: none; }
   .nav__links a { font-size: 10px; letter-spacing: 0.14em; padding-block: 0.92rem; padding-inline: 0.35rem; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
-  .motion-toggle [data-motion-label],
-  .motion-toggle [data-sound-label] { display: none; }
-  .motion-toggle { min-width: 44px; min-height: 44px; justify-content: center; }
+  .nav-toggle [data-sound-label] { display: none; }
+  .nav-toggle { min-width: 44px; min-height: 44px; justify-content: center; }
   .nav__co { display: none; }
   .nav__cta { font-size: 11px; padding: 0.8em 1em; min-height: 44px; display: inline-flex; align-items: center; }
   .hero__copy .h-hero { font-size: clamp(3.9rem, 22vw, 6.5rem); }

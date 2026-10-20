@@ -6,6 +6,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+/* The WebGL stage is decorative (aria-hidden, pointer-events:none) and sits at
+   z-index 3. All page copy must paint above it — no text may sit under the
+   canvas at any width. main/footer are lifted, sections keep transparent
+   backgrounds so the device still reads through. */
+main, .footer { position: relative; z-index: 4; }
 /* The nav is fixed, so anchor jumps must clear it. Mobile nav wraps to two
    rows (~116px), desktop is ~70px. */
 html { scroll-padding-top: 6rem; }
@@ -85,10 +90,10 @@ p { margin: 0 0 1em; max-width: 62ch; }
 .split-line { display: block; }
 
 /* Hide reveal targets only when JS + motion are on, to avoid flash of unstyled content. */
-html.js:not(.reduced) [data-reveal],
-html.js:not(.reduced) [data-split] { visibility: hidden; }
+html.js [data-reveal],
+html.js [data-split] { visibility: hidden; }
 
-html.reduced .grain { animation: none; }
+
 
 /* Screen-reader-only copy of split/animated text (see motion/reveal.js readableCopy). */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

@@ -2,17 +2,15 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/sections.css';
 
-import { gsap, ScrollTrigger, reduced, lenis, initSmoothScroll, initMotionToggle } from './motion/core.js';
+import { gsap, ScrollTrigger, reduced, lenis, initSmoothScroll } from './motion/core.js';
 import { initReveals, refreshOnFonts, splitReveal } from './motion/reveal.js';
 import { initMarquees, initMagnetic, initCursor, initHorizontal, initCounters } from './motion/interactions.js';
-import { createStage } from './device/stage.js';
 import { createGarden } from './game/garden.js';
 import { initSound, sfx } from './audio.js';
 import { drawTapeArt } from './game/tapeArt.js';
 
 initSound();
 initSmoothScroll();
-initMotionToggle();
 initHorizontal();
 initReveals();
 initMarquees();
@@ -23,9 +21,42 @@ refreshOnFonts();
 
 /* ------------------------------------------------------------------ *
  * The device: one WebGL object, anchored to the page.
+ * Three.js is a large chunk, so it is loaded on demand — never on the
+ * critical path. The hero copy and the intro run without waiting for it;
+ * the device fades in as soon as its chunk resolves.
  * ------------------------------------------------------------------ */
-const stage = createStage(document.getElementById('stage'));
-window.__stage = stage; // debug handle used by the studio QA harness
+let stage = null;
+let deviceStarted = false;
+let heroRevealed = false;
+
+function startDevice() {
+  if (deviceStarted) return;
+  deviceStarted = true;
+  import('./device/stage.js').then(({ createStage }) => {
+    stage = createStage(document.getElementById('stage'));
+    window.__stage = stage; // debug handle used by the studio QA harness
+    Object.assign(stage.state, poses().hero, { opacity: 0, open: 0.16 });
+    stage.screens.preview();
+    stage.setShell(currentShell);
+    stage.apply();
+    if (heroRevealed) {
+      gsap.to(stage.state, { opacity: 1, duration: 0.9, onUpdate: stage.apply });
+    } else {
+      updateStageVisibility();
+    }
+    ScrollTrigger.refresh();
+  }).catch((err) => {
+    // A failed device load must not take the page down with it.
+    console.error('device failed to load', err);
+  });
+}
+
+// Give the first paint the network to itself, then fetch the device.
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(startDevice, { timeout: 1500 });
+} else {
+  setTimeout(startDevice, 400);
+}
 
 const mq = window.matchMedia('(min-width: 900px)');
 const POSES = {
@@ -42,10 +73,6 @@ const POSES = {
 };
 const poses = () => (mq.matches ? POSES.desktop : POSES.mobile);
 
-Object.assign(stage.state, poses().hero, { opacity: 0, open: 0.16 });
-stage.screens.preview();
-stage.apply();
-
 const KEYS = ['fx', 'fy', 'w', 'rotX', 'rotY', 'rotZ'];
 const blend = (a, b, k) => {
   KEYS.forEach((key) => { stage.state[key] = a[key] + (b[key] - a[key]) * k; });
@@ -58,6 +85,7 @@ let stageVisible = false;
 let visTick = false;
 
 function updateStageVisibility() {
+  if (!stage) return;
   const vh = window.innerHeight;
   const any = deviceSections.some((el) => {
     const r = el.getBoundingClientRect();
@@ -99,7 +127,7 @@ ScrollTrigger.create({
   end: 'bottom bottom',
   invalidateOnRefresh: true,
   onUpdate: (self) => {
-    if (colourMode) return;
+    if (colourMode || !stage) return;
     const p = self.progress;
     const P = poses();
     if (p < 0.28) {
@@ -152,8 +180,11 @@ function revealHero() {
   }
   const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
   tl.add(() => heroSplits.forEach((s) => s?.play()))
-    .fromTo(heroBits, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.07 }, '-=0.85')
-    .to(stage.state, { opacity: 1, duration: 1.3, onUpdate: stage.apply }, '-=1.15');
+    .fromTo(heroBits, { opacity: 0, y: 22 }, { opacity: 1, y: 0, duration: 1.1, stagger: 0.07 }, '-=0.85');
+  heroRevealed = true;
+  // If the device chunk has already landed, fade it in with the copy;
+  // otherwise startDevice() picks this up the moment it resolves.
+  if (stage) tl.to(stage.state, { opacity: 1, duration: 1.3, onUpdate: stage.apply }, '-=1.15');
 }
 
 function intro() {
@@ -205,7 +236,7 @@ function setShell(key, animate = true) {
   const proxy = { t: 0 };
   const paint = () => {
     const rgb = from.map((c, i) => Math.round(c + (to[i] - c) * proxy.t));
-    stage.setShell(`#${rgb.map((c) => c.toString(16).padStart(2, '0')).join('')}`);
+    if (stage) stage.setShell(`#${rgb.map((c) => c.toString(16).padStart(2, '0')).join('')}`);
   };
   if (animate && !reduced) gsap.to(proxy, { t: 1, duration: 0.7, ease: 'power2.inOut', onUpdate: paint });
   else { proxy.t = 1; paint(); }
@@ -320,6 +351,7 @@ ScrollTrigger.create({
   start: 'top bottom',
   onEnter: () => {
     colourMode = true;
+    if (!stage) return;
     if (reduced) { stage.state.open = 0; stage.screens.reset(); stage.apply(); return; }
     gsap.to(stage.state, { open: 0, duration: 0.9, ease: 'power3.inOut', onUpdate: stage.apply, overwrite: true });
     stage.screens.reset();
@@ -334,7 +366,7 @@ ScrollTrigger.create({
 
 /* Re-measure once the pinned tape rail exists, and when the desktop breakpoint flips. */
 mq.addEventListener('change', () => {
-  Object.assign(stage.state, poses().hero);
+  if (stage) Object.assign(stage.state, poses().hero);
   ScrollTrigger.refresh();
 });
 ScrollTrigger.addEventListener('refreshInit', () => {});
