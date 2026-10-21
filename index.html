@@ -10,8 +10,8 @@
   <meta property="og:description" content="Two screens. Ten buttons. Nothing to check. $149." />
   <meta property="og:type" content="website" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-  <script type="module" crossorigin src="./assets/index-CfBaDwgq.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-BXMrMkR6.css">
+  <script type="module" crossorigin src="./assets/index-BQKoFedb.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-B4JlgXeW.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -69,6 +69,12 @@
           </div>
         </div>
 
+        <!-- On a phone the device gets this reserved band of its own (see
+             PLAN.md): the canvas cannot scroll, so without a band the object
+             lands on the CTA and the spec strip. Empty at every width — the
+             desktop frame has room beside the copy instead. -->
+        <div class="hero__band wrap" data-band="hero" aria-hidden="true"></div>
+
         <div class="hero__annotations" aria-hidden="true">
           <div class="dim dim--v">
             <span class="dim__line"></span>
@@ -113,6 +119,11 @@
             </p>
             <p class="label boot__hint" aria-hidden="true">Scroll to open <span class="boot__arrow">↓</span></p>
           </div>
+
+          <!-- The device's own band on a phone: between the copy and the
+               readout, so the object never sits under either. Empty on desktop,
+               where it sits beside the copy. -->
+          <div class="boot__band" data-band="boot" aria-hidden="true"></div>
 
           <div class="boot__readout" aria-hidden="true">
             <div class="readout__row"><span>Lid</span><b data-readout-lid>000°</b></div>
@@ -274,11 +285,12 @@
         <div class="play__copy">
           <p class="label">04 / Play it now</p>
           <h2 class="display h-1" id="play-h">Three buttons<br />is enough.</h2>
-          <p>
-            D-pad, A, B. That is the whole grammar. <em>Pebble Garden</em> — the tape in the box —
-            runs right here on the same 60&nbsp;Hz loop as the hardware.
-          </p>
-          <p class="play__keys label">Arrows / WASD walk · Space plant · R reset — or use the buttons</p>
+          <p class="play__lede">D-pad, A, B. That is the whole grammar. <em>Pebble Garden</em> — the tape in the box —
+            runs right here on the same 60&nbsp;Hz loop as the hardware.</p>
+          <!-- The desktop key list and a shorter phone line: one is shown per width.
+             The full instructions also stay in #game-help for screen readers. -->
+          <p class="play__keys play__keys--dt label">Arrows / WASD walk · Space plant · R reset — or use the buttons</p>
+          <p class="play__keys play__keys--phone label">Tap the D-pad to walk. Hold to keep walking. A plants a seed.</p>
         </div>
 
         <div class="console" data-reveal="up">
@@ -361,7 +373,7 @@
           </div>
           <p class="colours__pick label">Selected — <b data-shell-name>Butter</b></p>
         </div>
-        <div class="colours__space" aria-hidden="true">
+        <div class="colours__space" data-band="colours" aria-hidden="true">
           <span class="colours__spec label">Shell · 001</span>
           <span class="colours__spec colours__spec--b label">ABS · dyed</span>
         </div>
