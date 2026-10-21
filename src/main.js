@@ -287,18 +287,29 @@ ScrollTrigger.create({
       }
     }
     stage.apply();
-
-    const open = stage.state.open;
-    const deg = Math.round(open * 113);
-    if (readLid) readLid.textContent = `${String(deg).padStart(3, '0')}°`;
-    if (readScreen) readScreen.textContent = open < 0.35 ? 'Off' : open < 0.5 ? 'Wake' : 'Live';
-    if (readBoot) {
-      const pr = stage.screens.progress;
-      readBoot.textContent = open < 0.35 ? '—' : stage.screens.mode === 'play' ? 'OK' : `${Math.round(Math.min(1, pr) * 100)}%`;
-    }
-    if (readBar) readBar.style.width = `${Math.round(Math.min(1, open) * 100)}%`;
+    syncReadout();
   },
 });
+
+/* The LID / SCREEN / BOOT readout is a live status, so it must not freeze just
+   because the scroll stopped. On a phone the boot pin is short, so the screen
+   keeps booting after the pin ends; without this the readout would sit at 63%
+   while the screen is already live. Desktop writes it from the pin only, so its
+   behaviour is untouched. */
+function syncReadout() {
+  if (!stage) return;
+  const open = stage.state.open;
+  const deg = Math.round(open * 113);
+  const lid = `${String(deg).padStart(3, '0')}°`;
+  const screen = open < 0.35 ? 'Off' : open < 0.5 ? 'Wake' : 'Live';
+  const pr = stage.screens.progress;
+  const boot = open < 0.35 ? '—' : stage.screens.mode === 'play' ? 'OK' : `${Math.round(Math.min(1, pr) * 100)}%`;
+  if (readLid && readLid.textContent !== lid) readLid.textContent = lid;
+  if (readScreen && readScreen.textContent !== screen) readScreen.textContent = screen;
+  if (readBoot && readBoot.textContent !== boot) readBoot.textContent = boot;
+  if (readBar) readBar.style.width = `${Math.round(Math.min(1, open) * 100)}%`;
+}
+if (isPhone()) gsap.ticker.add(syncReadout);
 
 /* ------------------------------------------------------------------ *
  * Intro: counter, curtain, then the hero choreography.

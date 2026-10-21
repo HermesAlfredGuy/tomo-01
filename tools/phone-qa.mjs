@@ -14,6 +14,7 @@
  */
 import { createRequire } from 'module';
 import path from 'node:path';
+import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 
 const require = createRequire(import.meta.url);
@@ -69,7 +70,8 @@ async function main() {
   for (let y = 0; y <= total; y += stepPx) ys.push(y);
   if (ys[ys.length - 1] !== total) ys.push(total);
 
-  const outDir = path.join(ROOT, 'docs', 'final', 'mobile', 'after');
+  const outDir = path.join(ROOT, 'docs', 'final', 'mobile', arg('dir', 'after'));
+  await fs.mkdir(outDir, { recursive: true });
   const steps = [];
   for (let i = 0; i < ys.length; i++) {
     await go(ys[i]);
@@ -104,7 +106,7 @@ async function main() {
   const oneView = ['console', 'dpad', 'ab'].every((k) => play2[k].t >= 0 && play2[k].b <= play2.vh);
   console.log(`all three fully inside the viewport: ${oneView ? 'YES' : 'NO'}`);
 
-  await page.screenshot({ path: path.join(ROOT, 'docs', 'final', 'mobile', 'after', 'play-idle.png') });
+  await page.screenshot({ path: path.join(outDir, 'play-idle.png') });
   /* Press and hold the right D-pad button: the press must be visible (the :active
      transform) and the press must actually move the character on the canvas. */
   const before = await page.evaluate(() => document.querySelector('#game').toDataURL().length);
@@ -125,7 +127,7 @@ async function main() {
   });
   console.log(`D-pad press: transform=${press.transform} held=${press.held} scrollY=${press.scrollY} canvasLen ${before} -> ${press.canvasLen}`);
   console.log(`press visible (transform changed): ${press.transform !== 'none' && press.transform !== 'matrix(1, 0, 0, 1, 0, 0)' ? 'YES' : 'NO'}`);
-  await page.screenshot({ path: path.join(ROOT, 'docs', 'final', 'mobile', 'after', 'play-press.png') });
+  await page.screenshot({ path: path.join(outDir, 'play-press.png') });
   await page.mouse.up();
   await page.waitForTimeout(400);
   const after = await page.evaluate(() => document.querySelector('#game').toDataURL().length);
