@@ -327,9 +327,71 @@ export function createStage(canvas) {
   let running = true;
   let bootArmed = true;
 
+  // Phone bands: the device is fitted into a reserved, measured rect instead of
+  // being placed by eye. See docs/final/mobile/PLAN.md.
+  const band = { active: false, key: null, el: null, pad: 8, open: null, rot: null, inset: 0 };
+  const box = new THREE.Box3();
+  const v = new THREE.Vector3();
+  const poseKeys = ['fx', 'fy', 'w'];
+
   function viewport() {
     const vh = 2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
     return { vh, vw: vh * camera.aspect };
+  }
+
+  /**
+   * The device's projected bounding box in CSS pixels. This is the ground truth
+   * the phone layout is checked against — it is what actually gets drawn.
+   */
+  function deviceBounds() {
+    scene.updateMatrixWorld(true);
+    camera.updateMatrixWorld(true);
+    box.setFromObject(model);
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (let i = 0; i < 8; i++) {
+      v.set(
+        i & 1 ? box.max.x : box.min.x,
+        i & 2 ? box.max.y : box.min.y,
+        i & 4 ? box.max.z : box.min.z,
+      ).project(camera);
+      const x = (v.x * 0.5 + 0.5) * window.innerWidth;
+      const y = (-v.y * 0.5 + 0.5) * window.innerHeight;
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    }
+    return { left: minX, top: minY, right: maxX, bottom: maxY, width: maxX - minX, height: maxY - minY };
+  }
+
+  /**
+   * Scale and centre the device so its projected box fits `rect` (CSS px),
+   * leaving `pad` of clear margin. `open` is the lid angle to measure at — the
+   * boot band is solved at the fully-open pose so the object can grow into the
+   * band instead of out of it.
+   */
+  function fitToRect(rect, pad = 0, open = null, topInset = 0) {
+    if (!rect || rect.width < 4 || rect.height < 4) return;
+    const savedOpen = state.open;
+    if (open != null) state.open = open;
+    for (let pass = 0; pass < 2; pass++) {
+      apply();
+      const b = deviceBounds();
+      if (!(b.width > 0) || !(b.height > 0)) break;
+      const availW = Math.max(8, rect.width - pad * 2);
+      const availH = Math.max(8, rect.height - pad * 2 - topInset);
+      const k = Math.min(availW / b.width, availH / b.height);
+      // fx is a fraction of half-viewport-width, fy of half-viewport-height.
+      // rig.position.x maps +x to screen-right, but rig.position.y maps +y to
+      // screen-UP, so the vertical correction is subtracted. topInset insets the
+      // top of the rect: the sticky nav sits over the canvas, so a band near the
+      // top of the viewport must not reach under it.
+      state.fx += (rect.left + rect.width / 2 - (b.left + b.width / 2)) / (window.innerWidth / 2);
+      state.fy -= (rect.top + topInset + (rect.height - topInset) / 2 - (b.top + b.height / 2)) / (window.innerHeight / 2);
+      state.w = Math.max(0.02, Math.min(2, state.w * k));
+    }
+    if (open != null) state.open = savedOpen;
+    apply();
   }
 
   function apply() {
@@ -398,6 +460,34 @@ export function createStage(canvas) {
   return {
     state,
     screens,
+    deviceBounds,
+    /* Phone layout. `setBand(el)` makes the stage track a measured DOM rect
+       instead of the hand-tuned poses; `setBand(null)` hands control back to
+       the pose system. Rotation is set per band so the device keeps its
+       character at phone widths without being placed by eye. */
+    setBand(el, opts = {}) {
+      const next = el || null;
+      /* Re-run when the options change, not just when the element does: the nav
+         inset depends on where the band currently sits in the viewport. */
+      const key = next ? JSON.stringify([opts.pad ?? 8, opts.open ?? null, opts.rot ?? null, opts.inset ?? 0]) : '';
+      if (next === band.el && key === band.key) return;
+      band.el = next;
+      band.key = key;
+      band.pad = opts.pad ?? 8;
+      band.open = opts.open ?? null;
+      band.rot = opts.rot ?? null;
+      band.inset = opts.inset ?? 0;
+      if (next && band.rot) {
+        state.rotX = band.rot[0];
+        state.rotY = band.rot[1];
+        state.rotZ = band.rot[2];
+      }
+      if (next) fitToRect(next.getBoundingClientRect(), band.pad, band.open, band.inset);
+    },
+    fitBand(open = null) {
+      if (band.el) fitToRect(band.el.getBoundingClientRect(), band.pad, open ?? band.open, band.inset ?? 0);
+    },
+    get isBanded() { return !!band.el; },
     setOpen(v) {
       state.open = Math.max(0, Math.min(1, v));
       if (state.open > 0.42 && bootArmed) { screens.startBoot(); bootArmed = false; }

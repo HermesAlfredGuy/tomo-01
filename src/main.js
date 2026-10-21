@@ -44,7 +44,10 @@ function startDevice() {
     } else {
       updateStageVisibility();
     }
+    queuePhoneBand();
     ScrollTrigger.refresh();
+    // Keep the device pinned to its band after a refresh re-measures the page.
+    setTimeout(queuePhoneBand, 250);
   }).catch((err) => {
     // A failed device load must not take the page down with it.
     console.error('device failed to load', err);
@@ -84,14 +87,131 @@ const deviceSections = [...document.querySelectorAll('.hero, .boot, .colours')];
 let stageVisible = false;
 let visTick = false;
 
+/* ------------------------------------------------------------------ *
+ * Phone layout: the device rides reserved bands in the flow.
+ *
+ * The WebGL canvas is fixed to the viewport and cannot scroll, so the device
+ * used to be placed by hand-tuned numbers — which is exactly why it landed on
+ * the hero CTA, the spec strip and the "Two screens" heading. On a phone it is
+ * instead fitted to a real, measured, empty rect in the document
+ * (.hero__band, .boot__band, .colours__space), so "nothing sits under the
+ * device" is structural rather than a tuning accident, and the object travels
+ * with the page. See docs/final/mobile/PLAN.md.
+ *
+ * Desktop (>= 900px) keeps the pose system untouched.
+ * ------------------------------------------------------------------ */
+const isPhone = () => !mq.matches;
+const bandEls = [...document.querySelectorAll('[data-band]')];
+const BAND_ROT = {
+  hero: [0.24, -0.3, -0.86],
+  boot: [0.42, -0.08, -1.02],
+  colours: [0.26, -0.26, -0.88],
+};
+/* The lid angle each band is solved at is NOT fixed: the fit always uses the
+   live `state.open`, so the device exactly fills its band at whatever angle the
+   lid is at. That is what makes "nothing sits under the device" hold during the
+   boot sequence, when the lid swings from 0.16 to 1. */
+const BAND_OPEN = { hero: null, boot: null, colours: null };
+let activeBand = null;
+let bandTick = false;
+
+function pickBand() {
+  const vh = window.innerHeight;
+  let best = null;
+  let bestScore = 0;
+  for (const el of bandEls) {
+    const vis = bandVis(el);
+    if (vis <= 0) continue;
+    const score = vis / Math.max(1, el.getBoundingClientRect().height);
+    if (score > bestScore) { bestScore = score; best = el; }
+  }
+  return best;
+}
+
+/* How much of a band is actually visible: clipped to the viewport AND to below
+   the sticky nav, which is opaque and paints above the canvas. */
+function navBottom() {
+  const nav = document.querySelector('.nav');
+  return nav ? nav.getBoundingClientRect().bottom : 0;
+}
+function bandVis(el) {
+  const vh = window.innerHeight;
+  const r = el.getBoundingClientRect();
+  return Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, navBottom()));
+}
+
+function updatePhoneBand() {
+  if (!stage || !isPhone()) return;
+  const vh = window.innerHeight;
+  /* Stay with the band the device is already travelling in until that band has
+     completely left the viewport. Switching earlier would teleport the object
+     mid-screen; switching only when it is off-screen means the handoff is
+     invisible — the device travels out of the top, then travels into the next
+     band. */
+  if (activeBand && bandVis(activeBand) > 0) {
+    stage.setBand(activeBand, {
+      rot: BAND_ROT[activeBand.dataset.band] || null,
+      open: stage.state.open,
+      pad: 14,
+    });
+    /* Re-fit every frame: the band moves with the scroll, and setBand alone is a
+       no-op once the band and its options are unchanged. */
+    stage.fitBand(stage.state.open);
+    return;
+  }
+  const el = pickBand();
+  if (!el) { activeBand = null; return; }
+  activeBand = el;
+  stage.setBand(el, {
+    rot: BAND_ROT[el.dataset.band] || null,
+    open: stage.state.open,
+    pad: 14,
+  });
+}
+
+function queuePhoneBand() {
+  if (bandTick) return;
+  bandTick = true;
+  window.__bandEvents = (window.__bandEvents || 0) + 1;
+  requestAnimationFrame(() => {
+    bandTick = false;
+    updatePhoneBand();
+    /* Placement and visibility must agree on which band owns the object. */
+    updateStageVisibility();
+  });
+}
+
+window.__bandDebug = () => ({
+  active: activeBand ? activeBand.dataset.band : null,
+  stageBanded: stage ? stage.isBanded : null,
+  w: stage ? +stage.state.w.toFixed(4) : null,
+  open: stage ? +stage.state.open.toFixed(3) : null,
+  fx: stage ? +stage.state.fx.toFixed(4) : null,
+  fy: stage ? +stage.state.fy.toFixed(4) : null,
+  opacity: stage ? +stage.state.opacity.toFixed(3) : null,
+  events: window.__bandEvents || 0,
+  y: Math.round(window.scrollY),
+  bandRects: bandEls.map((el) => {
+    const r = el.getBoundingClientRect();
+    return `${el.dataset.band}@${Math.round(r.top)}..${Math.round(r.bottom)}`;
+  }),
+});
+
 function updateStageVisibility() {
   if (!stage) return;
   const vh = window.innerHeight;
-  const any = deviceSections.some((el) => {
+  const inView = (el, frac) => {
     const r = el.getBoundingClientRect();
     const overlap = Math.min(r.bottom, vh) - Math.max(r.top, 0);
-    return overlap > vh * 0.12;
-  });
+    return overlap > vh * frac;
+  };
+  /* On a phone the object exists exactly where its ACTIVE band is visible below
+     the nav — not merely where some band is. Otherwise the device can be parked
+     on a band that has left the screen while another band keeps it at opacity 1,
+     which is what puts it behind the header. */
+  const any = isPhone()
+    ? !!activeBand && bandVis(activeBand) > Math.min(140, activeBand.getBoundingClientRect().height * 0.5)
+    : deviceSections.some((el) => inView(el, 0.12));
   if (any === stageVisible) return;
   stageVisible = any;
   if (reduced) {
@@ -111,6 +231,8 @@ function queueVisibility() {
 }
 window.addEventListener('scroll', queueVisibility, { passive: true });
 window.addEventListener('resize', queueVisibility);
+window.addEventListener('scroll', queuePhoneBand, { passive: true });
+window.addEventListener('resize', queuePhoneBand);
 updateStageVisibility();
 
 /* Boot scroll story: approach pose → hinge open → screen boots. */
@@ -129,22 +251,39 @@ ScrollTrigger.create({
   onUpdate: (self) => {
     if (colourMode || !stage) return;
     const p = self.progress;
-    const P = poses();
-    if (p < 0.28) {
-      const k = easeInOut(Math.min(1, p / 0.28));
-      blend(P.hero, P.boot, reduced ? 1 : k);
-      stage.setOpen(0.16 * (1 - k));
-      if (k < 0.15 && stage.screens.mode === 'off') stage.screens.preview();
-    } else {
-      KEYS.forEach((key) => { stage.state[key] = P.boot[key]; });
-      const k = Math.min(1, Math.max(0, (p - 0.3) / 0.44));
+    if (isPhone()) {
+      /* On a phone the band owns placement; the trigger only opens the lid.
+         Phases are cut for the shorter 150vh pin so no two frames repeat. */
+      const k = Math.min(1, Math.max(0, (p - 0.22) / 0.66));
       const eased = 1 - Math.pow(1 - k, 3);
       const overshoot = Math.sin(Math.PI * Math.min(1, k * 1.1)) * 0.06 * (1 - k);
       const before = stage.state.open;
       stage.setOpen(Math.min(1, eased + overshoot));
+      if (k < 0.06 && stage.screens.mode === 'off') stage.screens.preview();
       if (before <= 0.42 && stage.state.open > 0.42) {
         sfx.thunk();
         setTimeout(() => sfx.boot(), 140);
+      }
+      /* Placement stays with updatePhoneBand (scroll-driven) so the band
+         handoff is never fought by two writers in the same frame. */
+    } else {
+      const P = poses();
+      if (p < 0.28) {
+        const k = easeInOut(Math.min(1, p / 0.28));
+        blend(P.hero, P.boot, reduced ? 1 : k);
+        stage.setOpen(0.16 * (1 - k));
+        if (k < 0.15 && stage.screens.mode === 'off') stage.screens.preview();
+      } else {
+        KEYS.forEach((key) => { stage.state[key] = P.boot[key]; });
+        const k = Math.min(1, Math.max(0, (p - 0.3) / 0.44));
+        const eased = 1 - Math.pow(1 - k, 3);
+        const overshoot = Math.sin(Math.PI * Math.min(1, k * 1.1)) * 0.06 * (1 - k);
+        const before = stage.state.open;
+        stage.setOpen(Math.min(1, eased + overshoot));
+        if (before <= 0.42 && stage.state.open > 0.42) {
+          sfx.thunk();
+          setTimeout(() => sfx.boot(), 140);
+        }
       }
     }
     stage.apply();
@@ -345,6 +484,29 @@ if (form) {
   });
 }
 
+/* Touch must not scroll the page while a finger is on the D-pad or the screen.
+   `touch-action: none` stops the browser taking the gesture; Lenis is also
+   stopped so a smooth-scroll that is already running cannot carry the page. */
+const consoleEl = document.querySelector('.console');
+if (consoleEl && lenis) {
+  let padHeld = false;
+  const padDown = (e) => {
+    if (e.pointerType !== 'touch') return;
+    padHeld = true;
+    lenis.stop();
+    consoleEl.classList.add('is-held');
+  };
+  const padUp = () => {
+    if (!padHeld) return;
+    padHeld = false;
+    consoleEl.classList.remove('is-held');
+    lenis.start();
+  };
+  consoleEl.addEventListener('pointerdown', padDown, { passive: true });
+  window.addEventListener('pointerup', padUp, { passive: true });
+  window.addEventListener('pointercancel', padUp, { passive: true });
+}
+
 /* Closing the lid again for the colour studio. */
 ScrollTrigger.create({
   trigger: '.colours',
@@ -366,8 +528,19 @@ ScrollTrigger.create({
 
 /* Re-measure once the pinned tape rail exists, and when the desktop breakpoint flips. */
 mq.addEventListener('change', () => {
-  if (stage) Object.assign(stage.state, poses().hero);
+  if (!stage) { ScrollTrigger.refresh(); return; }
+  if (isPhone()) {
+    /* Crossing onto a phone: hand placement to the bands and re-solve.
+       Crossing back to desktop: the pose system takes over again. */
+    activeBand = null;
+    stage.setBand(null);
+    queuePhoneBand();
+  } else {
+    stage.setBand(null);
+    Object.assign(stage.state, poses().hero);
+  }
   ScrollTrigger.refresh();
+  setTimeout(queuePhoneBand, 250);
 });
 ScrollTrigger.addEventListener('refreshInit', () => {});
 window.addEventListener('load', () => ScrollTrigger.refresh());

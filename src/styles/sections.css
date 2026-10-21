@@ -379,41 +379,67 @@
 }
 
 @media (max-width: 899px) {
-  .hero { padding-top: 8.75rem; padding-bottom: 0; gap: var(--space-l); min-height: 100svh; }
+  /* ---- header: ONE row, <=56px. wordmark | scrollable nav | sound | order ----
+     "THE BOOT" no longer wraps. The header is one row of wordmark, sound dot and
+     pre-order (<= 56px); the section nav is a separate, full-width, non-wrapping
+     row that scrolls sideways inside the bar. Every item is a 44px tap target. */
+  .nav__inner { flex-wrap: wrap; gap: 0; padding-block: 0.3rem; min-height: 56px; }
+  .nav__mark { flex: none; order: 1; min-height: 44px; }
+  .nav__word { font-size: 1.4rem; }
+  .nav__co { display: none; }
+  .nav__links {
+    order: 3; flex: 1 0 100%; min-width: 0;
+    overflow-x: auto; overflow-y: hidden;
+    gap: 0.15rem;
+    margin-inline: calc(-1 * var(--gutter)); padding-inline: var(--gutter);
+    border-top: 1px solid var(--line-soft);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 14px), transparent);
+  }
+  .nav__links::-webkit-scrollbar { display: none; }
+  .nav__links a {
+    flex: none; white-space: nowrap; font-size: 12px; letter-spacing: 0.09em;
+    min-width: 44px; min-height: 44px; padding-inline: 0.6rem;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .nav__actions { flex: none; order: 2; gap: 0.4rem; }
+  .nav-toggle { min-width: 44px; min-height: 44px; padding: 0; justify-content: center; }
+  .nav-toggle [data-sound-label] { display: none; }
+  .nav__cta { min-height: 44px; font-size: 12px; padding: 0 0.95em; white-space: nowrap; }
+
+  /* ---- hero: copy, then the device's own band, then the spec strip ----
+     The band is empty reserved space in the flow, so nothing can ever be
+     drawn under the object. */
+  .hero { padding-top: 7.5rem; padding-bottom: var(--space-m); gap: var(--space-s); min-height: 100svh; }
   .hero__grid { align-items: start; }
   .hero__copy { grid-column: 1 / -1; }
-  .hero__copy .h-hero { font-size: clamp(4.2rem, 21vw, 8rem); }
+  .hero__copy .h-hero { font-size: clamp(3.1rem, 16vw, 6.5rem); }
+  .hero__eyebrow { margin-bottom: 0.9rem; }
   .hero__sentence { font-size: var(--step-1); max-width: none; }
-  .hero__lede { max-width: 40ch; font-size: var(--step--1); }
+  .hero__lede { max-width: 40ch; font-size: var(--step--1); margin-top: 1rem; }
+  .hero__cta { flex-wrap: nowrap; gap: 0.5rem; margin-top: 1.1rem; }
+  .hero__cta .btn { flex: 1 1 0; min-width: 0; justify-content: center; padding: 0.9em 0.5em; font-size: 13px; }
+  .hero::after { display: none; }
+  .hero__band { grid-column: 1 / -1; height: clamp(230px, 34svh, 330px); }
   .hero__foot { flex-direction: column; align-items: stretch; gap: var(--space-s); }
   .hero__stats { grid-template-columns: repeat(2, 1fr); row-gap: var(--space-s); }
   .hero__stats dd { font-size: var(--step-1); }
   .hero__mouse { display: none; }
-  /* keep the lower third of the hero free for the device */
-  .hero::after { content: ""; display: block; height: 44svh; }
 
-  .boot { height: 260vh; }
-  .boot__sticky { align-items: flex-end; padding-bottom: 3vh; }
-  .boot__grid { grid-template-columns: 1fr; gap: var(--space-m); }
-  .boot__copy { grid-column: 1 / -1; padding-top: 5.5rem; }
-  /* On phones the device sits behind the copy at a size where its dark panel
-     and shadow fall under the body text. Give the copy its own paper ground so
-     no text is ever read over the object; the scrim fades out at the foot so
-     the device still reads as continuous. */
+  /* ---- boot: a shorter pin, the device in its own band, readout with it ----
+     The scrim is gone: the copy no longer sits over the object. */
+  .boot { height: 150vh; }
+  .boot__sticky { align-items: center; padding: 0; }
+  .boot__grid { grid-template-columns: 1fr; gap: var(--space-s); align-items: center; }
   .boot__copy {
-    background:
-      linear-gradient(to bottom,
-        var(--ground) 0,
-        var(--ground) calc(100% - 2.2rem),
-        color-mix(in oklab, var(--ground) 0%, transparent) 100%);
-    margin-inline: calc(var(--gutter) * -1);
-    padding-inline: var(--gutter);
-    padding-bottom: 2.2rem;
+    grid-column: 1 / -1; padding-top: 4rem;
+    background: none; margin-inline: 0; padding-inline: 0; padding-bottom: 0;
   }
-  .boot__copy .h-2 { font-size: clamp(2rem, 9vw, 2.9rem); }
-  .boot__body { max-width: 40ch; font-size: var(--step--1); }
+  .boot__copy .h-2 { font-size: clamp(1.8rem, 8.4vw, 2.3rem); }
+  .boot__body { max-width: 44ch; font-size: var(--step--1); }
   .boot__body--dim, .boot__hint { display: none; }
-  .boot__readout { grid-column: 1 / -1; align-self: end; margin: 0; width: 100%; }
+  .boot__band { height: clamp(240px, 36svh, 340px); }
+  .boot__readout { grid-column: 1 / -1; align-self: start; margin: 0; width: 100%; }
   .readout__bar { display: none; }
 
   .screens__grid, .play__grid, .specs__grid, .colours__grid, .order__grid, .manifesto__row, .tapes__head {
@@ -422,18 +448,22 @@
   .screens__lead { font-size: var(--step-1); }
   .facts { grid-template-columns: 1fr 1fr; }
   .tapes__note { text-align: left; justify-self: start; }
-  .rail__track { overflow-x: auto; scroll-snap-type: x mandatory; width: auto; padding-bottom: var(--space-s); scrollbar-width: none; }
+  .rail__track {
+    overflow-x: auto; scroll-snap-type: x proximity; width: auto;
+    padding-bottom: 0; scrollbar-width: none;
+  }
   .rail__track::-webkit-scrollbar { display: none; }
-  .tape { scroll-snap-align: center; width: 80vw; max-width: 380px; }
+  .tape { scroll-snap-align: start; width: min(68vw, 300px); }
   .specs__aside { position: static; }
   .specs__table th { width: 40%; padding-right: 0.8rem; }
   .colours__grid { min-height: 0; }
-  .colours__space { min-height: 46svh; order: -1; }
-  .colours__spec { top: auto; bottom: 0; }
-  .colours__spec--b { display: none; }
+  .colours__space { min-height: clamp(260px, 42svh, 380px); order: -1; }
+  .colours__spec { display: none; }
   .manifesto__h span:nth-child(2), .manifesto__h span:nth-child(3) { padding-left: 0; }
   .manifesto__sig { text-align: left; }
   .order__form { padding: var(--space-s); }
+  /* Touch targets: the field must be a comfortable 44px+ tall. */
+  .field input, .field select { padding: 0.85rem 0; }
   .footer__cols { grid-template-columns: 1fr 1fr; row-gap: var(--space-m); }
   .footer__word { font-size: 34vw; }
   .console { border-radius: 16px; }
@@ -442,34 +472,46 @@
   .dpad__up { left: 44px; } .dpad__left { top: 44px; } .dpad__right { left: 88px; top: 44px; } .dpad__down { left: 44px; top: 88px; }
   .dpad::after { left: 44px; top: 44px; width: 44px; height: 44px; }
   .ab__btn { width: 48px; height: 48px; }
+
+  /* ---- play: the console fits in one viewport — screen on top, pad below ---- */
+  .play__grid { gap: var(--space-m); }
+  .play__copy .h-1 { font-size: clamp(2rem, 9vw, 2.8rem); margin-bottom: 0.8rem; }
+  .play__copy p { max-width: 44ch; }
+  .play__lede { font-size: max(15px, var(--step-0)); line-height: 1.45; }
+  .play__keys--dt { display: none; }
+  .play__keys--phone { display: block; font-size: 12px; line-height: 1.5; margin-top: var(--space-s); }
+  .console { padding: 0.85rem; }
+  .console__top { gap: 0.6rem; }
+  .console__screen { padding: 7px; }
+  .console__speaker { display: none; }
+  .console__controls { margin-top: 0.9rem; }
+  .console__hint { margin-top: 0.7rem; }
+  /* A finger on the pad or the screen must never scroll the page. */
+  .console, .console__screen, .console__controls { touch-action: none; }
+  /* .visually-hidden is used on #game-help but was never defined — the
+     paragraph was rendering as visible text inside the console. Phones get
+     the real rule; the desktop console is untouched. */
+  .visually-hidden {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%);
+    white-space: nowrap; border: 0;
+  }
 }
 
 @media (max-width: 640px) {
-  .nav__inner { flex-wrap: wrap; row-gap: 0.35rem; padding-block: 0.6rem 0.55rem; }
-  .nav__links {
-    order: 3; width: 100%; overflow-x: auto; gap: 1.1rem; padding-bottom: 0.15rem;
-    scrollbar-width: none; -webkit-overflow-scrolling: touch;
-  }
-  .nav__links::-webkit-scrollbar { display: none; }
-  .nav__links a { font-size: 11.5px; letter-spacing: 0.12em; padding-block: 0.92rem; padding-inline: 0.35rem; min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
-  .nav-toggle [data-sound-label] { display: none; }
-  .nav-toggle { min-width: 44px; min-height: 44px; justify-content: center; }
-  .nav__co { display: none; }
-  .nav__cta { font-size: 11px; padding: 0.8em 1em; min-height: 44px; display: inline-flex; align-items: center; }
-  .hero__copy .h-hero { font-size: clamp(3.9rem, 22vw, 6.5rem); }
-  .hero::after { height: 44svh; }
-  .hero { padding-bottom: 32svh; }
   .footer__cols { grid-template-columns: 1fr; }
-  .footer__cols a { padding-block: 0.62rem; }
+  .footer__cols a { padding: 0.62rem 0.75rem; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
   .footer__base { padding-block: var(--space-m); }
-  .nav__mark { min-height: 44px; align-items: center; }
   .facts { grid-template-columns: 1fr; }
   .facts li:nth-child(odd) { border-right: 0; }
   .facts li:nth-child(even) { padding-left: 0; }
-  .play__keys { font-size: 11px; line-height: 1.6; }
-  /* Readable floors on phones: 13px body and 10px mono are too small to read
-     at arm's length. */
+  .play__keys { font-size: 12px; line-height: 1.5; }
+  .dpad__btn { font-size: 11px; }
+  .hero__star { font-size: max(11px, 0.5em); }
+  /* Readable floors on phones. --step--2 gets a 12px floor at the root so
+     every annotation that uses it is raised regardless of which selector
+     sets it; body copy and instruction lists get 15px. */
+  :root { --step--2: max(12px, clamp(0.72rem, 0.7rem + 0.11vw, 0.79rem)); }
   .hero__lede, .lede, .boot__body, .tape__pitch, .screens__lead { font-size: max(15px, var(--step-0)); line-height: 1.45; }
-  .label, .specs__table th, .readout__row span, .tape__meta, .swatch { font-size: max(12px, var(--step--2)); }
-  .tapes__note, .order__terms li { font-size: max(14.5px, var(--step--1)); line-height: 1.5; }
+  .tapes__note, .order__terms li, .order__list { font-size: max(15px, var(--step--1)); line-height: 1.5; }
 }
